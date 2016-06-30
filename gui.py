@@ -30,6 +30,7 @@ class MainApplication():
 
     def run(self):
         setup_env.display_message(u"開始執行...")
+        setup_env.set_environment()
 
 def create_windows():
     root = tk.Tk()
