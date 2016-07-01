@@ -5,6 +5,7 @@ import datetime
 def make_sure_folder_exists(folder):
     if not os.path.exists(folder):
         os.makedirs(folder)
+        display_message("Create folder: " + folder)
 
 def get_time():
     return datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
