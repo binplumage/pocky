@@ -5,6 +5,7 @@ import tkMessageBox
 import tkFileDialog
 import sys
 import setup_env
+import cmp_data
 
 
 class MainApplication():
@@ -27,11 +28,12 @@ class MainApplication():
 
     def write(self, massage):
         self.text.insert(tk.END, massage)
+        self.text.see(tk.END)
 
     def run(self):
         setup_env.display_message(u"開始執行...")
         setup_env.set_environment()
-        split_data(self.filename)
+        cmp_data.split_data(self.filename)
 
 def create_windows():
     root = tk.Tk()
