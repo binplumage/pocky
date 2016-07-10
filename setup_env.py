@@ -6,6 +6,7 @@ import datetime
 SCRIPT_DIR = os.getcwd()
 TMP_FOLDER = ""
 RESULT_FOLDER = ""
+FIELD_TABLE_FILE = SCRIPT_DIR + "\\field_table.xlsx"
 
 def create_folder(folder):
     try:

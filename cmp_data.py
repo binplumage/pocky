@@ -3,6 +3,14 @@ import setup_env
 import rw_data
 import re
 
+def get_field_table():
+    table = rw_data.read_excel(setup_env.FIELD_TABLE_FILE, 0)
+    field_table = {}
+
+    for i in range(1, table.nrows):
+        field_table[table.cell(i,0).value] = [table.cell(i,1).value, table.cell(i,2).value]
+    return field_table
+
 def get_split_point(table, num_rows):
     STUDENT_ID_COL = 7
     student_id = table.cell(1,STUDENT_ID_COL).value
