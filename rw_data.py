@@ -1,7 +1,7 @@
 import xlrd
 import xlwt
 
-style = xlwt.easyxf('border: top thin, bottom thin, left thin, right thin; font: bold on; align: vert centre, horz center;')
+style = xlwt.easyxf('border: top thin, bottom thin, left thin, right thin; align: vert centre, horz center;')
 
 def read_excel(file_name, sheet_number):
     try:

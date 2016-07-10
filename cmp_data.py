@@ -23,6 +23,31 @@ def get_split_point(table, num_rows):
             split_point.append(i)
     return split_point
 
+def is_pass(table, i):
+    scores = table.cell(i, 6).value.rstrip()
+    if scores in ["A+","A ","A-","B+","B ","B-","C+","C ","C-", "P"]:
+        return True
+    else:
+        return False
+
+def is_bd(table, i):
+    sid = table.cell(i, 7).value.rstrip()
+    if sid[0] == 'B':
+        return True
+    else:
+        return False
+
+def filter_data(file_name):
+    table = rw_data.read_excel(file_name, 0)
+    wb = rw_data.get_init_excel()
+    ws = rw_data.get_new_sheet(wb, "sheet 1")
+    count = 0
+    for i in range(1, table.nrows):
+        if is_bd(table, i) and is_pass(table, i):
+            rw_data.write_all_row_data(ws, table, count, i)
+            count = count + 1
+    wb.save(setup_env.TMP_FOLDER + "\\new.xls")
+
 def split_data(file_name):
     table = rw_data.read_excel(file_name, 0)
     row_num = rw_data.get_row_number(table)
