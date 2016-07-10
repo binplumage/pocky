@@ -4,9 +4,12 @@ import xlwt
 style = xlwt.easyxf('border: top thin, bottom thin, left thin, right thin; font: bold on; align: vert centre, horz center;')
 
 def read_excel(file_name, sheet_number):
-    data = xlrd.open_workbook(file_name)
-    table = data.sheets()[sheet_number]
-    return table
+    try:
+        data = xlrd.open_workbook(file_name)
+        table = data.sheets()[sheet_number]
+        return table
+    except:
+        setup_env.display_message(u"Cannot open file : " + file_name)
 
 def get_new_sheet(wb, sheet_name):
     ws = wb.add_sheet(sheet_name)
