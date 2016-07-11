@@ -7,6 +7,7 @@ SCRIPT_DIR = os.getcwd()
 TMP_FOLDER = ""
 RESULT_FOLDER = ""
 FIELD_TABLE_FILE = SCRIPT_DIR + "\\field_table.xlsx"
+FILTER_DATA = ""
 
 def create_folder(folder):
     try:
@@ -32,13 +33,14 @@ def get_time():
     return datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
 
 def set_environment():
-    global TMP_FOLDER, SCRIPT_DIR, RESULT_FOLDER
+    global TMP_FOLDER, SCRIPT_DIR, RESULT_FOLDER, FILTER_DATA
 
     now_time = get_time()
     TMP_FOLDER = SCRIPT_DIR + "\\tmp"
     RESULT_FOLDER = SCRIPT_DIR + "\\" + now_time
     make_sure_folder_exists(TMP_FOLDER)
     make_sure_folder_exists(RESULT_FOLDER)
+    FILTER_DATA = TMP_FOLDER + "\\new.xls"
     display_message("Setup Environment successful.")
 
 def display_message(mes):
