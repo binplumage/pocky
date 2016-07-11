@@ -3,6 +3,42 @@ import setup_env
 import rw_data
 import re
 
+def is_pass(table, i):
+    scores = table.cell(i, 6).value.rstrip()
+    if scores in ["A+","A ","A-","B+","B ","B-","C+","C ","C-", "P"]:
+        return True
+    else:
+        return False
+
+def is_bd(table, i):
+    sid = table.cell(i, 7).value.rstrip()
+    if sid[0] == 'B':
+        return True
+    else:
+        return False
+
+def filter_data(table):
+    wb = rw_data.get_init_excel()
+    ws = rw_data.get_new_sheet(wb, "sheet 1")
+    count = 0
+    for i in range(1, table.nrows):
+        if is_bd(table, i) and is_pass(table, i):
+            rw_data.write_all_row_data(ws, table, count, i)
+            count = count + 1
+    wb.save(setup_env.TMP_FOLDER + "\\new.xls")
+
+def get_sid_and_line_number(table):
+    sid_and_ln = {}
+
+    for i in range(table.nrows):
+        sid = table.cell(i, 7).value
+        if not sid in sid_and_ln:
+            sid_and_ln[sid] = [i]
+        else:
+            sid_and_ln[sid].append(i)
+
+    return sid_and_ln
+
 def get_field_table():
     table = rw_data.read_excel(setup_env.FIELD_TABLE_FILE, 0)
     field_table = {}
@@ -22,31 +58,6 @@ def get_split_point(table, num_rows):
             student_id = next_id
             split_point.append(i)
     return split_point
-
-def is_pass(table, i):
-    scores = table.cell(i, 6).value.rstrip()
-    if scores in ["A+","A ","A-","B+","B ","B-","C+","C ","C-", "P"]:
-        return True
-    else:
-        return False
-
-def is_bd(table, i):
-    sid = table.cell(i, 7).value.rstrip()
-    if sid[0] == 'B':
-        return True
-    else:
-        return False
-
-def filter_data(file_name):
-    table = rw_data.read_excel(file_name, 0)
-    wb = rw_data.get_init_excel()
-    ws = rw_data.get_new_sheet(wb, "sheet 1")
-    count = 0
-    for i in range(1, table.nrows):
-        if is_bd(table, i) and is_pass(table, i):
-            rw_data.write_all_row_data(ws, table, count, i)
-            count = count + 1
-    wb.save(setup_env.TMP_FOLDER + "\\new.xls")
 
 def split_data(file_name):
     table = rw_data.read_excel(file_name, 0)
