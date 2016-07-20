@@ -25,7 +25,33 @@ def filter_data(table):
         if is_bd(table, i) and is_pass(table, i):
             rw_data.write_all_row_data(ws, table, count, i)
             count = count + 1
-    wb.save(setup_env.TMP_FOLDER + "\\new.xls")
+    wb.save(setup_env.FILTER_DATA)
+
+def get_register_year(sid):
+    return sid[1:-5]
+
+def get_field_table():
+    table = rw_data.read_excel(setup_env.FIELD_TABLE_FILE, 0)
+    field_table = {}
+
+    for i in range(1, table.nrows):
+        field_table[table.cell(i,0).value] = [table.cell(i,1).value, table.cell(i,2).value]
+    return field_table
+
+def get_credit_in_field(title, ori_credit):
+
+    field_table = get_field_table()
+    if title in field_table:
+        credit = field_table[title]
+        if re.search(u"實習",title):
+            credit.extend(["V",0])
+        else:
+            credit.extend([0, 0])
+    else:
+        credit = [0, 0, 0, ori_credit]
+
+    return credit
+
 
 def get_sid_and_line_number(table):
     sid_and_ln = {}
@@ -38,14 +64,6 @@ def get_sid_and_line_number(table):
             sid_and_ln[sid].append(i)
 
     return sid_and_ln
-
-def get_field_table():
-    table = rw_data.read_excel(setup_env.FIELD_TABLE_FILE, 0)
-    field_table = {}
-
-    for i in range(1, table.nrows):
-        field_table[table.cell(i,0).value] = [table.cell(i,1).value, table.cell(i,2).value]
-    return field_table
 
 def get_split_point(table, num_rows):
     STUDENT_ID_COL = 7
