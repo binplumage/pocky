@@ -22,8 +22,8 @@ def get_init_excel():
     return wb
 
 def copy_all_row_data(ws, table, row, ori_row):
-    for j in range(9):
-        write_data(ws, row, j, get_cell_value(table, ori_row, j))
+    for i, j in enumerate([ i for i in range(9) if i !=1 ]):
+        write_data(ws, row, i, get_cell_value(table, ori_row, j))
 
 def write_data(ws, row, col, value, style=default_style):
     ws.write(row, col, value, style)
