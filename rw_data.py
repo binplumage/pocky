@@ -21,7 +21,7 @@ def get_init_excel():
     wb = xlwt.Workbook()
     return wb
 
-def write_all_row_data(ws, table, row, ori_row):
+def copy_all_row_data(ws, table, row, ori_row):
     for j in range(9):
         write_data(ws, row, j, table.cell(ori_row, j).value.rstrip())
 
@@ -56,3 +56,14 @@ def create_title(ws):
     write_data(ws, 1, 7, u"通識課程",default_style)
     ws.row(1).height_mismatch = True
     ws.row(1).height = 256*8
+
+def write_credit(ws, data, i):
+    for col, credit in enumerate(data, start=4):
+        if credit==None:
+            credit = " "
+        write_data(ws, i, col, credit)
+
+def write_all_data(ws, line_number, data):
+    for col, value in enumerate(data[0:-1]):
+        write_data(ws, line_number, col, value)
+    write_credit(ws, data[-1], line_number)
