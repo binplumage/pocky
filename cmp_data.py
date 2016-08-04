@@ -23,12 +23,9 @@ def filter_data(table):
     count = 0
     for i in range(1, table.nrows):
         if is_bd(table, i) and is_pass(table, i):
-            rw_data.write_all_row_data(ws, table, count, i)
+            rw_data.copy_all_row_data(ws, table, count, i)
             count = count + 1
     wb.save(setup_env.FILTER_DATA)
-
-def get_register_year(sid):
-    return sid[1:-5]
 
 def get_field_table():
     table = rw_data.read_excel(setup_env.FIELD_TABLE_FILE, 0)
@@ -44,14 +41,32 @@ def get_credit_in_field(title, ori_credit):
     if title in field_table:
         credit = field_table[title]
         if re.search(u"實習",title):
-            credit.extend(["V",0])
+            credit.extend(["V",None])
         else:
-            credit.extend([0, 0])
+            credit.extend([None, None])
     else:
-        credit = [0, 0, 0, ori_credit]
+        credit = [None, None, None, ori_credit]
 
     return credit
 
+def change_grade_format(register_year, ori_grade):
+
+    change_content = {0:u"一", 1:u"二", 2:u"三", 3:u"四", 4:u"五", 5:u"六", "01":u"上", "02":u"下", "0h":u"暑假"}
+    grade = change_content[int(ori_grade[0:-2]) - register_year]
+    semester = change_content[ori_grade[-2:]]
+    return grade + semester
+
+def get_data(table, row, register_year):
+    grade = change_grade_format(table, row, register_year)
+    title = rw_data.get_cell_value(table, row, 2)
+    teacher = rw_data.get_cell_value(table, row, 3)
+    requ_or_ele = rw_data.get_cell_value(table, row, 4)
+    credit = rw_data.get_cell_value(table, row, 5)
+    return [grade, title, teacher, requ_or_ele, credit]
+
+
+def get_register_year(sid):
+    return int(sid[1:-5])
 
 def get_sid_and_line_number(table):
     sid_and_ln = {}
@@ -64,34 +79,3 @@ def get_sid_and_line_number(table):
             sid_and_ln[sid].append(i)
 
     return sid_and_ln
-
-def get_split_point(table, num_rows):
-    STUDENT_ID_COL = 7
-    student_id = table.cell(1,STUDENT_ID_COL).value
-    # First row is title.
-    split_point = [1]
-    for i in range(2, num_rows):
-        next_id = table.cell(i,STUDENT_ID_COL).value
-        if not next_id is student_id:
-            student_id = next_id
-            split_point.append(i)
-    return split_point
-
-def split_data(file_name):
-    table = rw_data.read_excel(file_name, 0)
-    row_num = rw_data.get_row_number(table)
-    col_num = rw_data.get_col_number(table)
-    split_point = get_split_point(table, row_num)
-    split_point.append(row_num)
-
-    for s in range(len(split_point)-1):
-        wb = rw_data.get_init_excel()
-        ws = rw_data.get_new_sheet(wb, "sheet 1")
-        for i, ori_i in enumerate(range(split_point[s], split_point[s+1])):
-            sid = table.cell(ori_i, 7).value.rstrip()
-            if sid[0] == 'B':
-                rw_data.write_all_row_data(ws, table, i, ori_i)
-
-        wb.save(setup_env.TMP_FOLDER + "\\" + str(sid) + ".xls")
-        setup_env.display_message(u"Create "+ str(sid) +".xls tmp file...")
-    setup_env.display_message(u"Split finish...")
