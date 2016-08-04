@@ -78,10 +78,29 @@ def get_sid_and_line_number(table):
     sid_and_ln = {}
 
     for i in range(table.nrows):
-        sid = rw_data.get_cell_value(table, i, 7)
+        sid = rw_data.get_cell_value(table, i, 6)
+
         if not sid in sid_and_ln:
             sid_and_ln[sid] = [i]
         else:
             sid_and_ln[sid].append(i)
 
     return sid_and_ln
+
+def cmp_data():
+    setup_env.display_message(u"Runing ...")
+    table = rw_data.read_excel(setup_env.FILTER_DATA, 0)
+    sid_and_ln = get_sid_and_line_number(table)
+
+
+    for sid in list(sid_and_ln.keys()):
+        wb = rw_data.get_init_excel()
+        ws = rw_data.get_new_sheet(wb, "sheet 1")
+        rw_data.create_title(ws)
+        register_year = get_register_year(sid)
+
+        for i, ori_i in enumerate(sid_and_ln[sid], start = 2):
+            data = get_data(table, ori_i, register_year)
+            rw_data.write_processed_data(ws, i, data)
+        wb.save(setup_env.RESULT_FOLDER + "\\" + str(sid) + ".xls")
+        setup_env.display_message(u"Create "+ str(sid) +".xls ...")
