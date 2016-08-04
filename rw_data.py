@@ -23,7 +23,7 @@ def get_init_excel():
 
 def copy_all_row_data(ws, table, row, ori_row):
     for j in range(9):
-        write_data(ws, row, j, table.cell(ori_row, j).value.rstrip())
+        write_data(ws, row, j, get_cell_value(table, ori_row, j))
 
 def write_data(ws, row, col, value, style=default_style):
     ws.write(row, col, value, style)
@@ -35,7 +35,7 @@ def get_col_number(table):
     return table.ncols
 
 def get_cell_value(table, i, j):
-    return table.cell(i, j).value
+    return table.cell(i, j).value.strip()
 
 def get_grade(table, row, register_year):
     semester_table = {0:u"一", 1:u"二", 2:u"三", 3:u"四", 4:u"五", 5:u"六", "01":u"上", "02":u"下", "0h":u"暑假"}
