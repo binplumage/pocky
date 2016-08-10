@@ -67,3 +67,31 @@ def write_processed_data(ws, line_number, data):
     for col, value in enumerate(data[0:-1]):
         write_data(ws, line_number, col, value)
     write_credit(ws, data[-1], line_number)
+
+def create_result_title(ws, row):
+    ws.write_merge(row,row,0,3,u"修課總學分數(A)",default_style)
+    ws.write_merge(row+1,row+1,0,3,u"最低畢業學分數(B)",default_style)
+    ws.write_merge(row+1,row+1,4,7,u"136",default_style)
+    ws.write_merge(row+2,row+2,0,3,u"修課佔畢業學分數百分比(A/B)",default_style)
+    ws.write_merge(row+3,row+3,0,3,u"IEET認證規範4課程學分數之要求",default_style)
+    ws.write(row+3,4,u"34學分\n(25%)",default_style)
+    ws.write_merge(row+3,row+3,5,6,u"57學分\n(37.5%)",default_style)
+    ws.write_merge(row+4,row+4,0,3,u"是否符合",default_style)
+    ws.write_merge(row+5,row+5,0,3,u"是否選修實務專題",default_style)
+
+def write_result(ws, line_number, is_project):
+    style_percent = xlwt.easyxf(num_format_str='0.00%')
+    col = {4:"E", 5:"F", 7:"H"}
+    for num in [4, 5, 7]:
+        formula_SUM = "SUM("+str(col[num])+"3:"+str(col[num])+str(line_number)+")"
+        ws.write(line_number, num, xlwt.Formula(formula_SUM))
+        formula_AVE = str(col[num])+str(line_number+1)+"/136"
+        ws.write(line_number + 2, num, xlwt.Formula(formula_AVE), style_percent)
+        if num==4:
+            ws.write(line_number + 4, num, xlwt.Formula("IF(%(l)s > 0.25;\"YES\";\"NO\")"% {"l":str(col[num]+str(line_number+3))}))
+        if num==5:
+            ws.write(line_number + 4, num, xlwt.Formula("IF(%(l)s > 0.375;\"YES\";\"NO\")"% {"l":str(col[num]+str(line_number+3))}))
+    if is_project:
+        ws.write(line_number + 5, 4, u"是")
+    else:
+        ws.write(line_number + 5, 4, u"否")
