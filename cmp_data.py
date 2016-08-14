@@ -6,17 +6,13 @@ import re
 def is_pass(table, i):
     pass_sco = ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "P"]
     scores = rw_data.get_cell_value(table, i, 6)
-    if scores in pass_sco:
-        return True
-    else:
-        return False
+
+    return True if scores in pass_sco else False
 
 def is_bd(table, i):
     sid = rw_data.get_cell_value(table, i, 7)
-    if sid[0] == 'B':
-        return True
-    else:
-        return False
+
+    return True if sid[0] == 'B' else False
 
 def filter_data(table):
     wb = rw_data.get_init_excel()
@@ -43,7 +39,7 @@ def get_credit_in_field(title, ori_credit):
 
     if title in field_table:
         credit = field_table[title]
-        if re.search(u"實習",title):
+        if re.search(u"實習", title) or re.search(u"專題", title):
             credit.extend(["V",None])
         else:
             credit.extend([None, None])
@@ -59,13 +55,16 @@ def change_grade_format(register_year, ori_grade):
     semester = change_content[ori_grade[-2:]]
     return grade + semester
 
+def is_take_project(title):
+    return True if title == u"實務專題" else False
+
 def get_data(table, row, register_year):
     data = []
     for col in range(5):
         data.append(rw_data.get_cell_value(table, row, col))
 
     ori_grade = data[0]
-    ori_credit = data[4]
+    ori_credit = int(data[4])
     data[0] = change_grade_format(register_year, ori_grade)
     data[4] = get_credit_in_field(data[1], ori_credit)
 
@@ -88,19 +87,22 @@ def get_sid_and_line_number(table):
     return sid_and_ln
 
 def cmp_data():
-    setup_env.display_message(u"Runing ...")
     table = rw_data.read_excel(setup_env.FILTER_DATA, 0)
     sid_and_ln = get_sid_and_line_number(table)
-
 
     for sid in list(sid_and_ln.keys()):
         wb = rw_data.get_init_excel()
         ws = rw_data.get_new_sheet(wb, "sheet 1")
         rw_data.create_title(ws)
         register_year = get_register_year(sid)
+        is_project = False
 
         for i, ori_i in enumerate(sid_and_ln[sid], start = 2):
             data = get_data(table, ori_i, register_year)
             rw_data.write_processed_data(ws, i, data)
+            if not is_project:
+                is_project = is_take_project(data[1])
+
+        rw_data.write_result(ws, i+1, is_project)
         wb.save(setup_env.RESULT_FOLDER + "\\" + str(sid) + ".xls")
         setup_env.display_message(u"Create "+ str(sid) +".xls ...")
