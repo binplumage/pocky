@@ -48,4 +48,6 @@ def display_message(mes):
     print time + " " + mes
 
 def clean_envirnoment():
-    pass
+    display_message("Clean Environment ...")
+    delete_folder(TMP_FOLDER)
+    display_message("Clean Environment successful.")
