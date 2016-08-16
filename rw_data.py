@@ -5,12 +5,12 @@ import xlwt
 import setup_env
 
 default_style = xlwt.easyxf('border: top thin, bottom thin, left thin, right thin; align: vert centre, horz center;')
+OUTUT_DATA_TITLE_ORDER = [u"修課學年期",u"課程名稱",u"授課教授",u"必選修",u"學分",u"成績",u"學號",u"姓名"]
 
 GET_DATA_TITLE_COL = {}
 
 def get_title_col(table):
     global GET_DATA_TITLE_COL
-
     for i, j in enumerate(range(9)):
         GET_DATA_TITLE_COL[get_cell_value(table,0,j)] = i
 
@@ -31,8 +31,8 @@ def get_init_excel():
     return wb
 
 def copy_all_row_data(ws, table, row, ori_row):
-    for i, j in enumerate([ i for i in range(9) if i !=1 ]):
-        write_data(ws, row, i, get_cell_value(table, ori_row, j))
+    for j, i in enumerate(OUTUT_DATA_TITLE_ORDER):
+        write_data(ws, row, j, get_cell_value(table, ori_row, GET_DATA_TITLE_COL[i]))
 
 def write_merge_data(ws, row, col, value, style=default_style):
     ws.write_merge(row[0], row[1], col[0], col[1], value, style)
