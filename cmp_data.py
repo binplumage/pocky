@@ -5,12 +5,12 @@ import re
 
 def is_pass(table, i):
     pass_sco = ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "P"]
-    scores = rw_data.get_cell_value(table, i, 6)
+    scores = rw_data.get_cell_value(table, i, rw_data.GET_DATA_TITLE_COL[u"成績"])
 
     return True if scores in pass_sco else False
 
 def is_bd(table, i):
-    sid = rw_data.get_cell_value(table, i, 7)
+    sid = rw_data.get_cell_value(table, i, rw_data.GET_DATA_TITLE_COL[u"學號"])
 
     return True if sid[0] == 'B' else False
 

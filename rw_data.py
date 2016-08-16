@@ -6,7 +6,6 @@ import setup_env
 
 default_style = xlwt.easyxf('border: top thin, bottom thin, left thin, right thin; align: vert centre, horz center;')
 OUTUT_DATA_TITLE_ORDER = [u"修課學年期",u"課程名稱",u"授課教授",u"必選修",u"學分",u"成績",u"學號",u"姓名"]
-
 GET_DATA_TITLE_COL = {}
 
 def get_title_col(table):
