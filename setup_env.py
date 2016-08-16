@@ -2,12 +2,30 @@
 import os
 import shutil
 import datetime
+import rw_data
 
 SCRIPT_DIR = os.getcwd()
 TMP_FOLDER = ""
 RESULT_FOLDER = ""
 FIELD_TABLE_FILE = SCRIPT_DIR + "\\field_table.xlsx"
 FILTER_DATA = ""
+GRADUATION_CREDIT_THRESHOLD = 128
+TITLE_COL = 0
+TEACHER_COL = 0
+REQ_OR_OPT_COL = 0
+CREDIT_COL = 0
+SCORES_COL = 0
+SID_COL = 0
+NAME_COL = 0
+
+def set_title_col_val():
+    TITLE_COL = rw_data.GET_DATA_TITLE_COL[u"課程名稱"]
+    TEACHER_COL = rw_data.GET_DATA_TITLE_COL[u"授課教授"]
+    REQ_OR_OPT_COL = rw_data.GET_DATA_TITLE_COL[u"必選修"]
+    CREDIT_COL = rw_data.GET_DATA_TITLE_COL[u"學分"]
+    SCORES_COL = rw_data.GET_DATA_TITLE_COL[u"成績"]
+    SID_COL = rw_data.GET_DATA_TITLE_COL[u"學號"]
+    NAME_COL = rw_data.GET_DATA_TITLE_COL[u"姓名"]
 
 def create_folder(folder):
     try:
@@ -32,8 +50,8 @@ def make_sure_folder_exists(folder):
 def get_time():
     return datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
 
-def set_environment():
-    global TMP_FOLDER, SCRIPT_DIR, RESULT_FOLDER, FILTER_DATA
+def set_environment(credit_threshold):
+    global TMP_FOLDER, SCRIPT_DIR, RESULT_FOLDER, FILTER_DATA, GRADUATION_CREDIT_THRESHOLD
 
     now_time = get_time()
     TMP_FOLDER = SCRIPT_DIR + "\\tmp"
@@ -41,6 +59,7 @@ def set_environment():
     make_sure_folder_exists(TMP_FOLDER)
     make_sure_folder_exists(RESULT_FOLDER)
     FILTER_DATA = TMP_FOLDER + "\\new.xls"
+    set_title_col_val()
     display_message("Setup Environment successful.")
 
 def display_message(mes):
