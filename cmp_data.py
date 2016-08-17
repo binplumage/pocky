@@ -4,6 +4,8 @@ import rw_data
 import copy
 import re
 
+GRADUATION_CREDIT_THRESHOLD = 128
+
 def is_pass(table, i):
     pass_sco = ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "P"]
     scores = rw_data.get_cell_value(table, i, rw_data.GET_DATA_TITLE_COL[u"成績"])
@@ -27,10 +29,17 @@ def filter_data(table):
     setup_env.display_message(u"Create tmp file new.xls ...")
 
 def get_field_table():
+    global GRADUATION_CREDIT_THRESHOLD
     table = rw_data.read_excel(setup_env.CONFIG_FILE, 0)
     field_table = {}
-    for i in range(2, table.nrows):
-        field_table[table.cell(i,0).value] = [int(table.cell(i,1).value), int(table.cell(i,2).value)]
+
+    if rw_data.get_cell_value(table, 0, 0) == u"最低總學分門檻" and table.cell(0,1).value:
+        GRADUATION_CREDIT_THRESHOLD = int(table.cell(0,1).value)
+    if rw_data.get_cell_value(table, 1, 1) == u"數學及基礎科學" and rw_data.get_cell_value(table, 1, 2) == u"工程專業課程":
+        for i in range(2, table.nrows):
+            field_table[table.cell(i,0).value] = [int(table.cell(i,1).value), int(table.cell(i,2).value)]
+    else:
+        raise Exception(u"Config file is wrong.")
     return field_table
 
 def get_credit_in_field(title, ori_credit, field_table):

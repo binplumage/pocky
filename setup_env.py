@@ -9,7 +9,6 @@ TMP_FOLDER = ""
 RESULT_FOLDER = ""
 CONFIG_FILE = ""
 FILTER_DATA = ""
-GRADUATION_CREDIT_THRESHOLD = 128
 
 def create_folder(folder):
     try:

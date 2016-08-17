@@ -3,6 +3,7 @@
 import xlrd
 import xlwt
 import setup_env
+import cmp_data
 import sys
 
 default_style = xlwt.easyxf('border: top thin, bottom thin, left thin, right thin; align: vert centre, horz center;')
@@ -85,7 +86,7 @@ def create_result_title(ws, row):
     write_data(ws, row+3,7," ")
     write_merge_data(ws, [row, row], [0, 3], u"修課總學分數(A)")
     write_merge_data(ws, [row + 1, row + 1], [0, 3], u"最低畢業學分數(B)")
-    write_merge_data(ws, [row + 1, row + 1], [4, 7], setup_env.GRADUATION_CREDIT_THRESHOLD )
+    write_merge_data(ws, [row + 1, row + 1], [4, 7], cmp_data.GRADUATION_CREDIT_THRESHOLD )
     write_merge_data(ws, [row + 2, row + 2], [0, 3], u"修課佔畢業學分數百分比(A/B)")
     write_merge_data(ws, [row + 3, row + 3], [0, 3], u"IEET認證規範4課程學分數之要求")
     write_merge_data(ws, [row + 4, row + 4], [0, 3], u"是否符合")
@@ -109,7 +110,7 @@ def write_result_data(ws, row, is_project):
         write_data(ws, row, col_num, xlwt.Formula(formula_SUM))
 
     for col_num in col:
-        formula_AVE = str(col[col_num][0])+str(row + 1)+"/"+str(setup_env.GRADUATION_CREDIT_THRESHOLD)
+        formula_AVE = str(col[col_num][0])+str(row + 1)+"/"+str(cmp_data.GRADUATION_CREDIT_THRESHOLD)
         if col[col_num][1]:
             is_credit_enough(ws, [row + 3 , row + 4 ], [col[col_num][0], col_num], col[col_num][1])
             write_data(ws, row + 2, col_num, xlwt.Formula(formula_AVE), style_percent)
