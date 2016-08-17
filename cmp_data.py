@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 import setup_env
 import rw_data
+import copy
 import re
 
 def is_pass(table, i):
@@ -26,7 +27,6 @@ def filter_data(table):
     setup_env.display_message(u"Create tmp file new.xls ...")
 
 def get_field_table():
-
     table = rw_data.read_excel(setup_env.CONFIG_FILE, 0)
     field_table = {}
     for i in range(2, table.nrows):
@@ -36,7 +36,7 @@ def get_field_table():
 def get_credit_in_field(title, ori_credit, field_table):
 
     if title in field_table:
-        credit = field_table[title]
+        credit = copy.deepcopy(field_table[title])
         if re.search(u"實習", title) or re.search(u"專題", title):
             credit.extend(["V",None])
         else:
