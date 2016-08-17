@@ -19,7 +19,7 @@ def read_excel(file_name, sheet_number):
         table = data.sheets()[sheet_number]
         return table
     except:
-        setup_env.display_message(u"Cannot open file : " + file_name)
+        raise Exception(u"Cannot open file : " + file_name)
 
 def get_new_sheet(wb, sheet_name):
     ws = wb.add_sheet(sheet_name)
