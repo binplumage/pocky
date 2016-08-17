@@ -3,6 +3,7 @@
 import xlrd
 import xlwt
 import setup_env
+import sys
 
 default_style = xlwt.easyxf('border: top thin, bottom thin, left thin, right thin; align: vert centre, horz center;')
 OUTUT_DATA_TITLE_ORDER = [u"修課學年期",u"課程名稱",u"授課教授",u"必選修",u"學分",u"成績",u"學號",u"姓名"]
@@ -19,7 +20,7 @@ def read_excel(file_name, sheet_number):
         table = data.sheets()[sheet_number]
         return table
     except:
-        raise Exception(u"Cannot open file : " + file_name)
+        raise Exception(u"Can not open file : " + file_name)
 
 def get_new_sheet(wb, sheet_name):
     ws = wb.add_sheet(sheet_name)

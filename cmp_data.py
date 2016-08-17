@@ -26,16 +26,14 @@ def filter_data(table):
     setup_env.display_message(u"Create tmp file new.xls ...")
 
 def get_field_table():
-    table = rw_data.read_excel(setup_env.FIELD_TABLE_FILE, 0)
-    field_table = {}
 
-    for i in range(1, table.nrows):
+    table = rw_data.read_excel(setup_env.CONFIG_FILE, 0)
+    field_table = {}
+    for i in range(2, table.nrows):
         field_table[table.cell(i,0).value] = [int(table.cell(i,1).value), int(table.cell(i,2).value)]
     return field_table
 
-def get_credit_in_field(title, ori_credit):
-
-    field_table = get_field_table()
+def get_credit_in_field(title, ori_credit, field_table):
 
     if title in field_table:
         credit = field_table[title]
@@ -58,7 +56,7 @@ def change_grade_format(register_year, ori_grade):
 def is_take_project(title):
     return True if title == u"實務專題" else False
 
-def get_data(table, row, register_year):
+def get_data(table, row, register_year, field_table):
     data = []
     for col in range(5):
         data.append(rw_data.get_cell_value(table, row, col))
@@ -66,7 +64,7 @@ def get_data(table, row, register_year):
     ori_grade = data[0]
     ori_credit = int(data[4])
     data[0] = change_grade_format(register_year, ori_grade)
-    data[4] = get_credit_in_field(data[1], ori_credit)
+    data[4] = get_credit_in_field(data[1], ori_credit, field_table)
 
     return data
 
@@ -87,6 +85,7 @@ def get_sid_and_line_number(table):
     return sid_and_ln
 
 def cmp_data():
+    field_table = get_field_table()
     table = rw_data.read_excel(setup_env.FILTER_DATA, 0)
     sid_and_ln = get_sid_and_line_number(table)
 
@@ -98,7 +97,7 @@ def cmp_data():
         is_project = False
 
         for i, ori_i in enumerate(sid_and_ln[sid], start = 2):
-            data = get_data(table, ori_i, register_year)
+            data = get_data(table, ori_i, register_year, field_table)
             rw_data.write_processed_data(ws, i, data)
             if not is_project:
                 is_project = is_take_project(data[1])

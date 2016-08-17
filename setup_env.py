@@ -7,7 +7,7 @@ import rw_data
 SCRIPT_DIR = os.getcwd()
 TMP_FOLDER = ""
 RESULT_FOLDER = ""
-FIELD_TABLE_FILE = ""
+CONFIG_FILE = ""
 FILTER_DATA = ""
 GRADUATION_CREDIT_THRESHOLD = 128
 
@@ -38,14 +38,14 @@ def get_time():
     return datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
 
 def set_environment(confg_file):
-    global TMP_FOLDER, SCRIPT_DIR, RESULT_FOLDER, FILTER_DATA
+    global TMP_FOLDER, SCRIPT_DIR, RESULT_FOLDER, FILTER_DATA, CONFIG_FILE
 
     now_time = get_time()
     TMP_FOLDER = SCRIPT_DIR + "\\tmp"
     RESULT_FOLDER = SCRIPT_DIR + "\\" + now_time
     create_new_folder(TMP_FOLDER)
     create_folder(RESULT_FOLDER)
-    FIELD_TABLE_FILE = confg_file
+    CONFIG_FILE = confg_file
     FILTER_DATA = TMP_FOLDER + "\\new.xls"
     display_message("Setup Environment successful.")
 
