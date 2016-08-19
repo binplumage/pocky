@@ -66,7 +66,7 @@ class MainApplication():
 
 def create_windows():
     root = tk.Tk()
-    root.title(u"工程認證 B1.0.0.01")
+    root.title(u"工程認證 V1.0.0.B0")
     root.minsize(width = 600, height = 500)
     sys.stdout = MainApplication(root)
     root.mainloop()
