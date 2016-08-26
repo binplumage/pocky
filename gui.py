@@ -8,7 +8,7 @@ import sys
 import setup_env
 import cmp_data
 import rw_data
-
+import tkFont
 
 class MainApplication():
     def __init__(self, master):
@@ -16,23 +16,25 @@ class MainApplication():
         self.filename = ""
         self.confg = ""
         self.master = master
-        self.frame = tk.Frame(self.master)
+        #setting color.
+        bkc = "floral white"
+        fgc = "RosyBrown4"
+        bgc = "misty rose"
+
+        self.FontForButton = tkFont.Font(family="Verdana", size=12)
+        self.FontForLabel = tkFont.Font(family="Verdana", weight="bold")
+        self.frame = tk.Frame(self.master, bg=bkc)
         self.frame.pack()
-        self.chose_button = tk.Button(self.frame, text = u"選擇檔案", width = 10, command = self.open_file)
+        self.chose_button = tk.Button(self.frame, text = u"選擇檔案", command = self.open_file, font=self.FontForButton, width = 20, bg=bgc, fg=fgc)
         self.chose_button.pack(padx = 5, pady = 10, side = tk.TOP)
-        self.chose_confg_button = tk.Button(self.frame, text = u"選擇設定檔", width = 10, command = self.get_confg)
+        self.chose_confg_button = tk.Button(self.frame, text = u"選擇設定檔", command = self.get_confg, font=self.FontForButton, width = 20, bg=bgc, fg=fgc)
         self.chose_confg_button.pack(padx = 5, pady = 10, side = tk.TOP)
-        self.run_button = tk.Button(self.frame, text = u"執行", width = 10, command = self.run)
+        self.run_button = tk.Button(self.frame, text = u"執行", command = self.run, font=self.FontForButton, width = 20, bg=bgc, fg=fgc)
         self.run_button.pack(padx = 5, pady = 10, side = tk.TOP)
-
-        self.text = ScrolledText(self.master)
-        #self.text = tk.Text(self.master)
+        self.text = ScrolledText(self.frame)
         self.text.pack()
-
-        #self.scrollb = tk.Scrollbar(self.frame, command=self.text.yview)
-        #self.scrollb.grid(row=0, column=1, sticky='nsew')
-        #self.text['yscrollcommand'] = self.scrollb.set
-
+        self.mdby = tk.Label(self.frame, text="\nPowered By MITLab", font=self.FontForLabel, fg="SkyBlue1", bg=bkc)
+        self.mdby.pack(side='bottom')
 
     def open_file(self):
         self.filename = tkFileDialog.askopenfilename()
@@ -42,7 +44,7 @@ class MainApplication():
     def get_confg(self):
         self.confg = tkFileDialog.askopenfilename()
         if self.confg :
-            setup_env.display_message(u"選擇confg檔案: " + self.confg)
+            setup_env.display_message(u"選擇設定檔案: " + self.confg)
 
     def write(self, massage):
         self.text.insert(tk.END, massage)
@@ -66,8 +68,9 @@ class MainApplication():
 
 def create_windows():
     root = tk.Tk()
-    root.title(u"工程認證 V1.0.0.B0")
+    root.title(u"畢業學分核定系統 V1.0.0")
     root.minsize(width = 600, height = 500)
+    root.attributes("-toolwindow", 1)
     sys.stdout = MainApplication(root)
     root.mainloop()
 
