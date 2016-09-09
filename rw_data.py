@@ -48,14 +48,6 @@ def get_col_number(table):
 def get_cell_value(table, i, j):
     return table.cell(i, j).value.strip()
 
-def get_grade(table, row, register_year):
-    semester_table = {0:u"一", 1:u"二", 2:u"三", 3:u"四", 4:u"五", 5:u"六", "01":u"上", "02":u"下", "0h":u"暑假"}
-    raw_grade = get_cell_value(table, row, 0)
-    semester = semester_table[raw_grade[-2:]]
-    take_year = raw_grade[:-2]
-    year = semester_table[int(take_year)-int(register_year)]
-    return year+semester
-
 def create_title(ws):
     write_merge_data(ws, [0, 1], [0, 0], u"年級")
     write_merge_data(ws, [0, 1], [1, 1], u"課程名稱")
