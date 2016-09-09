@@ -74,4 +74,5 @@ def create_windows():
     sys.stdout = MainApplication(root)
     root.mainloop()
 
-create_windows()
+if __name__ == '__main__':
+    create_windows()
