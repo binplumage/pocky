@@ -72,7 +72,9 @@ def write_processed_data(ws, row, data):
     write_credit(ws, data[-1], row)
 
 def create_result_title(ws, row):
-    write_data(ws, row+3, 4, u"34學分\n(25%)")
+    math_threshold__credit = int(cmp_data.GRADUATION_CREDIT_THRESHOLD * 0.25)
+    engineering_threshold_credit = int(cmp_data.GRADUATION_CREDIT_THRESHOLD * 0.375)
+    write_data(ws, row+3, 4, u"{0}學分\n(25%)".format(math_threshold__credit))
     write_data(ws, row+3,7," ")
     write_merge_data(ws, [row, row], [0, 3], u"修課總學分數(A)")
     write_merge_data(ws, [row + 1, row + 1], [0, 3], u"最低畢業學分數(B)")
@@ -81,7 +83,7 @@ def create_result_title(ws, row):
     write_merge_data(ws, [row + 3, row + 3], [0, 3], u"IEET認證規範4課程學分數之要求")
     write_merge_data(ws, [row + 4, row + 4], [0, 3], u"是否符合")
     write_merge_data(ws, [row + 5, row + 5], [0, 3], u"是否選修實務專題")
-    write_merge_data(ws, [row + 3, row + 3], [5, 6], u"57學分\n(37.5%)")
+    write_merge_data(ws, [row + 3, row + 3], [5, 6], u"{0}學分\n(37.5%)".format(engineering_threshold_credit))
 
 def is_credit_enough(ws, row, col, percent):
     formula_if = 'IF({0} > {1};"Yes";"No")'.format(str(col[0]) + str(row[0]), percent)
