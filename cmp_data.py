@@ -32,6 +32,7 @@ def get_field_table():
     global GRADUATION_CREDIT_THRESHOLD
     table = rw_data.read_excel(setup_env.CONFIG_FILE, 0)
     field_table = {}
+    GRADUATION_CREDIT_THRESHOLD = 128
 
     if rw_data.get_cell_value(table, 0, 0) == u"最低總學分門檻" and table.cell(0,1).value:
         GRADUATION_CREDIT_THRESHOLD = int(table.cell(0,1).value)
